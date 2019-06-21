@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<link rel="stylesheet" type="text/css"
+		href="#{loginController.rutaRaizServidor}/estilos/estiloLogin.css" /> 
+	<link rel="shortcut icon" href="#{loginController.rutaRaizServidor}/imagenes/favicon.ico" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>SGMCEUPS</title>
+</h:head>
+<body>
+	<div id="login" align="center">
+		<table style="width: 100%">
+			<tr>
+				<td><h:form>
+						<p:menubar styleClass="ui-state-hover" autoDisplay="false">
+							<p:menuitem
+								value="SISTEMA DE GESTIÓN MATRÍCULA - CEUPS" />
+							<p:submenu label="Ayuda" icon="ui-icon-gear"
+								style="position: absolute; right: 30px;">
+								<p:menuitem value="Ayuda"
+									action="#{loginController.iraHelp}" ajax="false" />
+								<p:menuitem value="Acerca de SGMCEUPS" onclick="dlg.show()" />
+							</p:submenu>
+						</p:menubar>
+					</h:form></td>
+			</tr>
+			<tr>
+				<td height="100px"></td>
+			</tr>
+		</table>
+	</div>
+	<h:form id="formLogin">
+		<div align="center">
+			<p:panel>
+				<h:panelGrid columns="3" allign="center">
+					<f:facet name="header">
+						<h:outputText value="Iniciar Sesión" />
+					</f:facet>
+					<h:outputText value="Usuario: " />
+					<p:inputText id="idUsuario"
+						value="#{loginController.usuarioIngresado}" required="true"
+						size="35" requiredMessage="Debe ingresar un usuario." />
+					<h:message for="idUsuario" style="color:red" />
+
+					<h:outputText value="Contraseña: " />
+					<p:password id="idContrasenia"
+						value="#{loginController.contraseniaIngresada}" required="true"
+						size="35" requiredMessage="Debe ingresar la contraseña."
+						feedback="false" />
+					<h:message for="idContrasenia" style="color:red" />
+				</h:panelGrid>
+				<p:commandButton value="Iniciar Sesión" ajax="false"
+						action="#{loginController.login}" />
+			</p:panel>			
+		</div>
+	</h:form>
+
+	<p:dialog id="picture" widgetVar="dlg" modal="true"
+		header="Acerca de SGMCEUPS" width="425" resizable="false"
+		showEffect="clip" hideEffect="clip">
+		<center>
+			<p:graphicImage value="/imagenes/sgmceups.png" />
+		</center>
+		<br></br>
+		<br></br>
+		<div align="left">
+			<h:outputText value="SGMCEUPS Versión 1.0.0" style="font-weight:bold" /><br/><br/>
+			<h:outputText value="El Sistema de Gestión Matricula - CEUPS es mantenido y desarrollado por:" /><br/><br/>
+			<h:outputText value="* Munive Orbegoso, Daniel Alberto" /><br/> 
+			<h:outputText value="* Rosas Arce, Luis Alberto" /><br/>  
+			<h:outputText value="* Perez Aguilar, Kimberly Sofía" /><br/> 
+			<h:outputText value="* Justino Límaco, Clara Alessandra" /><br/><br/> 
+			<h:outputText value="Copyright &copy; 2015 - SGMECEUPS" />
+		</div>
+	</p:dialog>
+</body>
+</html>

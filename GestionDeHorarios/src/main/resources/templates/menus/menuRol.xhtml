@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	<h:form id="formenu" prependId="false">
+		<p:growl id="messages" />
+		<p:growl id="growMenu" showDetail="true" life="3000"></p:growl>
+		<p:menubar styleClass="ui-state-hover" autoDisplay="false">
+			<p:menuitem value="SISTEMA DE GESTIÓN MATRÍCULA" />
+			<p:menuitem value="|" />
+			<p:menuitem value="CEUPS" />
+			<p:submenu label="Ayuda" icon="ui-icon-gear">
+				<p:menuitem value="Ayuda" action="#{loginController.iraHelp}" ajax="false" />
+				<p:menuitem value="Acerca de SGMCEUPS" onclick="dlg.show()"/>
+			</p:submenu>
+			<p:menuitem value="Inicio" icon="ui-icon-home"
+				action="#{loginController.iraPaginaPrincipal}" />
+			
+			<p:menuitem value="#{loginController.usuario.usuario}" icon="ui-icon-person" style="position: absolute; right: 4px;" />
+		</p:menubar>
+		
+		<p:menubar autoDisplay="false">
+			<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_CURSO','ROLE_MANTENIMIENTO_CURSO_APERTURADO','ROLE_MANTENIMIENTO_ALUMNO','ROLE_MANTENIMIENTO_DOCENTE','ROLE_MANTENIMIENTO_USUARIO')">
+				<p:submenu label="Mantenimientos" style=" text-align:left">
+					<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_CURSO')">
+						<p:menuitem  value="Curso" action="#{loginController.iraMantenimientoCurso}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_CURSO_APERTURADO')">
+						<p:menuitem  value="Curso aperturado" action="#{loginController.iraMantenimientoCursoAperturado}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_ALUMNO')">
+						<p:menuitem  value="Alumno" action="#{loginController.iraMantenimientoAlumno}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_DOCENTE')">
+						<p:menuitem  value="Docente" action="#{loginController.iraMantenimientoDocente}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_MANTENIMIENTO_USUARIO')">
+						<p:menuitem  value="Usuario" action="#{loginController.iraMantenimientoUsuario}" ajax="false" />
+					</sec:authorize>
+				</p:submenu >
+			</sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_PROCESO_MATRICULA','ROLE_PROCESO_APERTURAR_CURSO','ROLE_PROCESO_CLAUSURAR_CURSO')">
+				<p:submenu label="Procesos" style=" text-align:left">
+					<sec:authorize access="hasAnyRole('ROLE_PROCESO_MATRICULA')">
+						<p:menuitem  value="Matrícula" action="#{loginController.iraProcesoMatricula}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_PROCESO_APERTURAR_CURSO')">
+						<p:menuitem  value="Aperturar curso" action="#{loginController.iraProcesoAperturarCurso}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_PROCESO_CLAUSURAR_CURSO')">
+						<p:menuitem  value="Clausurar curso" action="#{loginController.iraProcesoClausurarCurso}" ajax="false" />
+					</sec:authorize>
+				</p:submenu >
+			</sec:authorize>
+			<sec:authorize access="hasAnyRole('ROLE_CONSULTA_ALUMNO','ROLE_CONSULTA_CURSO_APERTURADO')">
+				<p:submenu label="Consultas" style=" text-align:left">
+					<sec:authorize access="hasAnyRole('ROLE_CONSULTA_ALUMNO')">
+						<p:menuitem  value="Alumno" action="#{loginController.iraConsultaAlumno}" ajax="false" />
+					</sec:authorize>
+					<sec:authorize access="hasAnyRole('ROLE_CONSULTA_CURSO_APERTURADO')">
+						<p:menuitem  value="Curso Aperturado" action="#{loginController.iraConsultaCursoAperturado}" ajax="false" />
+					</sec:authorize>
+				</p:submenu >
+			</sec:authorize>
+			
+			<p:menuitem  value="Cerrar Sesión" icon="ui-icon-circle-close"
+				action="#{loginController.cerrarSesionGeneric}"
+				style="position: absolute; right: 4px;" />
+		</p:menubar>
+	</h:form>
+</ui:composition>

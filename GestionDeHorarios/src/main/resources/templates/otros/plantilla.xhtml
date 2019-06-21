@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<link rel="stylesheet" type="text/css"
+		href="#{loginController.rutaRaizServidor}/estilos/estilo.css" />
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<link rel="shortcut icon" href="#{loginController.rutaRaizServidor}/imagenes/favicon.ico" />
+	<title><ui:insert name="title">Título en construcción.</ui:insert></title>
+</h:head>
+<h:body>
+	<h:outputScript name="js/calendar-localization.js"/>
+	<f:view>
+		<p:ajaxStatus onstart="statusDialog.show();"
+			onsuccess="statusDialog.hide();" />
+
+		<p:dialog modal="true" widgetVar="statusDialog" header="Estado"
+			resizable="false" draggable="false" closable="false"
+			style="text-align:center">
+			<p:graphicImage id="load" value="/imagenes/loading.gif" height="50px"
+				width="50px" />
+			<br />
+			<h3>
+				<h:outputText value="Cargando..." />
+			</h3>
+		</p:dialog>
+		<p:idleMonitor timeout="3600000" onidle="idleDialog.show()" />
+		<p:dialog header="LA SESIÓN HA EXPIRADO" resizable="false"
+			closable="false" widgetVar="idleDialog" modal="true">
+			<h:form>
+				<center>
+					<p:commandButton value="Ir a la Página de Inicio" action="#{loginController.cerrarSesionGeneric}"/>
+				</center>
+			</h:form>
+		</p:dialog>
+		<p:dialog id="picture" widgetVar="dlg" modal="true"
+			header="Acerca de SGMCEUPS" width="425" resizable="false"
+			showEffect="clip" hideEffect="clip">
+			<center>
+				<p:graphicImage value="/imagenes/sgmceups.png" />
+			</center>
+			<br></br>
+			<br></br>
+			<div align="left">
+				<h:outputText value="SGMCEUPS Versión 1.0.0" style="font-weight:bold" /><br/><br/>
+				<h:outputText value="El Sistema de Gestión Matricula - CEUPS es mantenido y desarrollado por:" /><br/><br/>
+				<h:outputText value="* Munive Orbegoso, Daniel Alberto" /><br/> 
+				<h:outputText value="* Rosas Arce, Luis Alberto" /><br/>  
+				<h:outputText value="* Perez Aguilar, Kimberly Sofía" /><br/> 
+				<h:outputText value="* Justino Límaco, Clara Alessandra" /><br/><br/> 
+				<h:outputText value="Copyright &copy; 2015 - SGMECEUPS" />
+			</div>
+		</p:dialog>
+		<div id="layout" align="center">
+			<div id="principal">
+				<ui:include src="#{loginController.dirMenu}" />
+				<p:spacer height="10px" />
+				<ui:insert name="contenido">
+					<span>Página en construcción.</span>
+				</ui:insert>
+			</div>
+		</div>
+	</f:view>
+</h:body>
+</html>

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/paginas/otros/plantilla.xhtml">
+	<ui:define name="title">SGMCEUPS</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formMantenimientoUsuario">	
+			<p:growl id="growl" showDetail="true" life="10000"/> 
+			<p:tabView id="tabViewMantenimientoUsuario">
+				<p:tab title="Registrar Usuario">
+					<div align="left">
+						<p:messages id="messagesRegistroUsuario" showDetail="true" closable="true" />
+					</div>
+					<p:separator/>
+					<p:panel id="panelRegistrarUsuario" header="Registrar Usuario">
+						<h:panelGrid columns="2"  cellpadding="5">
+							<h:outputText value="Nombres: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.nombre}" size="35" />
+							
+							<h:outputText value="Apellido paterno: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.apPaterno}" size="35" />
+												
+							<h:outputText value="Apellido Materno: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.apMaterno}" size="35" />
+							
+							<h:outputText value="DNI: " />
+							<p:inputMask  value="#{mantenimientoUsuarioController.usuarioIngresado.dni}" size="35" mask="99999999"/>
+							
+							<h:outputText value="Teléfono: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.telefono}" size="35" placeholder="p.e. (999)999-9999 ó 999-999-999"/>
+							
+							<h:outputText value="Dirección: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.direccion}" size="35" />
+							
+							<h:outputText value="Correo electrónico: " />
+							<p:inputText type="email" value="#{mantenimientoUsuarioController.usuarioIngresado.email}" placeholder="p.e. contacto@ejemplo.com" size="35"/>
+							
+							<h:outputText value="Puesto: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.puesto}" size="35" />
+							
+							<h:outputText value="Usuario: " />
+							<p:inputText value="#{mantenimientoUsuarioController.usuarioIngresado.usuario}" size="35" />
+							
+							<h:outputText value="Contraseña: " />
+							<p:password value="#{mantenimientoUsuarioController.usuarioIngresado.contrasenia}" size="35" />
+												
+							<h:outputText value="Confirmar Contraseña: " />
+							<p:password value="#{mantenimientoUsuarioController.confirmacionContrasenia}" size="35" />
+												
+							<h:outputText value="Perfiles: " />
+							<p:commandButton title="Asignar Perfiles" value="Asignar Perfiles" oncomplete="PF('dlgAsignarPerfiles').show()" update=":formMantenimientoUsuario:dialogAsignarPerfiles" />
+						</h:panelGrid>
+						<br/>
+						<br/>
+						<center>
+							<p:commandButton title="Registrar" value="Registrar" actionListener="#{mantenimientoUsuarioController.validarDatosUsuario}" update=":formMantenimientoUsuario:tabViewMantenimientoUsuario:messagesRegistroUsuario,:formMantenimientoUsuario:dialogConfirmacionRegistroUsuario"/>
+						</center>
+					</p:panel>
+				</p:tab>
+				<p:tab title="Modificar Usuario">
+					<br/>
+					<br/>
+					<p:panel id="panelBusqueda" header="Búsqueda de Usuarios">
+						<p:selectOneRadio id="radioBusqueda" value="#{mantenimientoUsuarioController.opcionBusqueda}" layout="custom">
+		            		<f:selectItem itemValue="1" />
+		            		<f:selectItem itemValue="2" />
+		           			<f:selectItem itemValue="3" />
+		           			<f:selectItem itemValue="4" />
+		           			<f:selectItem itemValue="5" />
+		           			<p:ajax listener="#{mantenimientoUsuarioController.limpiarCampoBusqueda}" update=":formMantenimientoUsuario:tabViewMantenimientoUsuario:panelBusqueda:" event="change" />
+		        		</p:selectOneRadio>
+						<h:outputText value="Seleccione una opción de búsqueda:"/>
+						<h:panelGrid columns="3" cellpadding="5">
+		            		<p:radioButton id="op1" for="radioBusqueda" itemIndex="0" />
+		            		<h:outputLabel for="op1" value="DNI:" />
+		            		<p:inputMask value="#{mantenimientoUsuarioController.campoBusqueda}" size="35" disabled="#{mantenimientoUsuarioController.opcionBusqueda!=1}" mask="99999999"/>
+		            		
+		            		<p:radioButton id="op2" for="radioBusqueda" itemIndex="1" />
+		            		<h:outputLabel for="op2" value="Nombre:" />
+		            		<p:inputText value="#{mantenimientoUsuarioController.campoBusqueda}" size="35" disabled="#{mantenimientoUsuarioController.opcionBusqueda!=2}"/>
+		            		
+		            		<p:radioButton id="op3" for="radioBusqueda" itemIndex="2" />
+		            		<h:outputLabel for="op3" value="Apellido Paterno:" />
+		            		<p:inputText value="#{mantenimientoUsuarioController.campoBusqueda}" size="35" disabled="#{mantenimientoUsuarioController.opcionBusqueda!=3}"/>
+		            		
+		            		<p:radioButton id="op4" for="radioBusqueda" itemIndex="3" />
+		            		<h:outputLabel for="op4" value="Apellido Materno:" />
+		            		<p:inputText value="#{mantenimientoUsuarioController.campoBusqueda}" size="35" disabled="#{mantenimientoUsuarioController.opcionBusqueda!=4}"/>
+		
+		            		<p:radioButton id="op5" for="radioBusqueda" itemIndex="4" />
+		            		<h:outputLabel for="op5" value="Usuario:" />
+		            		<p:inputText value="#{mantenimientoUsuarioController.campoBusqueda}" size="35" disabled="#{mantenimientoUsuarioController.opcionBusqueda!=5}"/>
+		       			</h:panelGrid>
+	       				<br/>
+						<center>
+							<p:commandButton title="Buscar" value="Buscar" ajax="true" actionListener="#{mantenimientoUsuarioController.buscar}" update=":formMantenimientoUsuario:tabViewMantenimientoUsuario:dtListaUsuario,:formMantenimientoUsuario:growl"/>
+						</center>
+					</p:panel>
+					<br/>
+					<br/>
+					<p:dataTable id="dtListaUsuario" var="usuario" value="#{mantenimientoUsuarioController.listaUsuario}" emptyMessage="No existen usuarios con la búsqueda realizada.">
+						<f:facet name="header">
+							Lista de Usuarios
+						</f:facet>
+						<p:column headerText="Nombre" style="text-align:center">
+							<h:outputText value="#{usuario.nombre}" />
+						</p:column>
+						<p:column headerText="Apellido paterno" style="text-align:center">
+							<h:outputText value="#{usuario.apPaterno}" />
+						</p:column>
+						<p:column headerText="Apellido materno" style="text-align:center">
+							<h:outputText value="#{usuario.apMaterno}" />
+						</p:column>
+						<p:column headerText="DNI" style="text-align:center">
+							<h:outputText value="#{usuario.dni}" />
+						</p:column>
+						<p:column headerText="Teléfono" style="text-align:center">
+							<h:outputText value="#{usuario.telefono}" />
+						</p:column>
+						<p:column headerText="Dirección" style="text-align:center">
+							<h:outputText value="#{usuario.direccion}" />
+						</p:column>
+						<p:column headerText="Correo electrónico" style="text-align:center">
+							<h:outputText value="#{usuario.email}" />
+						</p:column>
+						<p:column headerText="Puesto" style="text-align:center">
+							<h:outputText value="#{usuario.puesto}" />
+						</p:column>
+						<p:column headerText="Usuario" style="text-align:center">
+							<h:outputText value="#{usuario.usuario}" />
+						</p:column>
+						<p:column headerText="Contraseña" style="text-align:center">
+							<p:commandButton value="Cambiar contraseña" title="Cambiar contraseña"  oncomplete="PF('dlgCambiarContrasenia').show()" update=":formMantenimientoUsuario:dialogCambiarContrasenia,">
+								<f:setPropertyActionListener target="#{mantenimientoUsuarioController.usuarioModificado}" value="#{usuario}"/>
+							</p:commandButton>
+						</p:column>
+						<p:column headerText="Estado" style="text-align:center;white-space: pre-wrap">
+							<h:outputText value="#{usuario.estado==true?'HABILITADO':'DESHABILITADO'}  "/>
+							<p:commandButton value="Cambiar Estado" title="Cambiar Estado" action="#{mantenimientoUsuarioController.cambiarEstado}" update=":formMantenimientoUsuario:tabViewMantenimientoUsuario:dtListaUsuario">
+								<f:setPropertyActionListener target="#{mantenimientoUsuarioController.usuarioModificado}" value="#{usuario}"/>
+							</p:commandButton>
+						</p:column>
+						<p:column headerText="Modificar" style="text-align:center">
+							<p:commandButton value="Modificar" title="Modificar" oncomplete="PF('dlgModificarUsuario').show()" action="#{mantenimientoUsuarioController.obtenerPerfiles}" update=":formMantenimientoUsuario:dialogModificarUsuario">
+								<f:setPropertyActionListener target="#{mantenimientoUsuarioController.usuarioModificado}" value="#{usuario}"/>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+				</p:tab>
+			</p:tabView>
+			
+			<p:dialog id="dialogAsignarPerfiles" header="Asignar Perfiles"
+				widgetVar="dlgAsignarPerfiles" resizable="true" showEffect="fade" hideEffect="explode" modal="true">
+					<h:panelGrid columns="2">
+	 					<h:outputText value="Agregar un nuevo Perfil:" />
+						<p:selectOneMenu id="seleccionAgregarPerfiles" value="#{mantenimientoUsuarioController.idPerfilIngresado}" filter="true" filterMatchMode="contains" style="width:400px">
+							<f:selectItem itemLabel="Seleccione un nuevo perfil." itemValue="0"/>
+							<f:selectItems value="#{mantenimientoUsuarioController.listaTodosPerfiles}"
+								var="perfil" itemLabel="#{perfil.nombre}"
+								itemValue="#{perfil.id}" />
+						</p:selectOneMenu> 
+					</h:panelGrid>
+					<p:commandButton title="Agregar" value="Agregar" ajax="true" actionListener="#{mantenimientoUsuarioController.agregarPerfilIngresado}" update=":formMantenimientoUsuario:dtAsignarPerfiles,:formMantenimientoUsuario:growl"/>
+					<br/>
+					<br/>
+					<p:dataTable id="dtAsignarPerfiles" var="perfil" value="#{mantenimientoUsuarioController.listaPerfilesIngresados}" emptyMessage="No existen perfiles asignado al usuario.">
+						<f:facet name="header">
+							Asignar Perfiles
+						</f:facet>
+						<p:column headerText="Nombre del Perfil" style="text-align:center">
+							<h:outputText value="#{perfil.nombre}" />
+						</p:column>
+						<p:column headerText="Eliminar" style="text-align:center">
+							<p:commandButton title="Eliminar" value="Eliminar" ajax="true" action="#{mantenimientoUsuarioController.eliminarPerfilIngresado}" update=":formMantenimientoUsuario:dtAsignarPerfiles,:formMantenimientoUsuario:growl">
+								<f:setPropertyActionListener target="#{mantenimientoUsuarioController.perfilIngresadoEliminado}" value="#{perfil}"/>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br/>
+					<br/>
+			</p:dialog>
+		
+			<p:dialog id="dialogCambiarContrasenia" header="Cambiar Contraseña" showEffect="fade" hideEffect="explode"
+				widgetVar="dlgCambiarContrasenia" modal="true">
+				<p:panel header="Cambiar Contraseña">
+					<div align="left">
+						<p:messages id="messagesCambiarContrasenia" showDetail="true" closable="true" />
+					</div>
+					<p:separator/>
+					<h:outputText value="Ingrese los campos:"/>
+					<br/>
+					<br/>
+					<h:panelGrid columns="2">
+						<h:outputText value="Contraseña actual:"/>
+						<p:password value="#{mantenimientoUsuarioController.contraseniaActual}" size="35"/>
+						<h:outputText value="Nueva contraseña:"/>
+						<p:password value="#{mantenimientoUsuarioController.nuevaContrasenia}" size="35"/>
+						<h:outputText value="Confirmación de la nueva contraseña:"/>
+						<p:password value="#{mantenimientoUsuarioController.confirmacionNuevaContrasenia}" size="35"/>
+					</h:panelGrid>
+					<br/>
+					<br/>
+					<p:commandButton value="Cambiar contraseña" title="Cambiar contraseña" actionListener="#{mantenimientoUsuarioController.validarContraseniaUsuario}" update=":formMantenimientoUsuario:messagesCambiarContrasenia,:formMantenimientoUsuario:dialogConfirmacionCambiarContrasenia"/>
+					<br/>
+					<br/>
+				</p:panel>
+			</p:dialog>
+			
+			<p:dialog id="dialogModificarUsuario" header="Modificar Usuario" showEffect="fade" hideEffect="explode"
+				widgetVar="dlgModificarUsuario" modal="true">
+				<p:ajax event="close" update="dialogModificarUsuario"/>
+				<div align="left">
+					<p:messages id="messagesModificarUsuario" showDetail="true" closable="true" />
+				</div>
+				<p:separator/>
+				<p:panel header="Modificar Usuario">
+					<h:outputText value="Modifique los campos que desee:"/>
+					<br/>
+					<br/>
+					<h:panelGrid columns="2">
+							<h:outputText value="Nombres: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.nombre}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Apellido paterno: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.apPaterno}" size="35" />
+							</p:inplace>
+												
+							<h:outputText value="Apellido Materno: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.apMaterno}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="DNI: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.dni}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Teléfono: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.telefono}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Dirección: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.direccion}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Correo electrónico: " />
+							<p:inplace>
+								<p:inputText type="email" value="#{mantenimientoUsuarioController.usuarioModificado.email}" placeholder="contacto@ejemplo.com" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Puesto: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.puesto}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Usuario: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoUsuarioController.usuarioModificado.usuario}" size="35" />
+							</p:inplace>
+											
+							<h:outputText value="Perfiles: " />
+							<p:commandButton title="Modificar Perfiles" value="Modificar Perfiles" oncomplete="PF('dlgModificarPerfiles').show()" update=":formMantenimientoUsuario:dialogModificarPerfiles"/>	
+					</h:panelGrid>
+					<br/>
+					<br/>
+					<p:commandButton value="Guardar cambios" title="Guardar cambios" actionListener="#{mantenimientoUsuarioController.validarDatosModificarUsuario}" update=":formMantenimientoUsuario:messagesModificarUsuario,:formMantenimientoUsuario:dialogConfirmacionModificarUsuario" />
+					<br/>
+					<br/>
+				</p:panel>
+			</p:dialog>
+			
+			<p:dialog id="dialogModificarPerfiles" header="Modificar Perfiles"
+				widgetVar="dlgModificarPerfiles" resizable="true" showEffect="fade" hideEffect="explode" modal="true">
+				<p:panel header="Modificar Perfiles">
+					<h:panelGrid columns="2">
+	 					<h:outputText value="Agregar un nuevo Perfil:" />
+						<p:selectOneMenu id="seleccionModificarPerfiles" value="#{mantenimientoUsuarioController.idPerfilModificado}"  filter="true" filterMatchMode="contains" style="width:400px">
+							<f:selectItem itemLabel="Seleccione un nuevo perfil." itemValue="0"/>
+							<f:selectItems value="#{mantenimientoUsuarioController.listaTodosPerfiles}"
+								var="perfil" itemLabel="#{perfil.nombre}"
+								itemValue="#{perfil.id}" />
+						</p:selectOneMenu> 
+					</h:panelGrid>
+					<p:commandButton title="Agregar" value="Agregar" ajax="true" actionListener="#{mantenimientoUsuarioController.agregarPerfilModificado}" update=":formMantenimientoUsuario:dtModificarPerfiles,:formMantenimientoUsuario:growl"/>
+					<br/>
+					<br/>
+					<p:dataTable id="dtModificarPerfiles" var="perfil" value="#{mantenimientoUsuarioController.listaPerfilesModificados}" emptyMessage="No existen perfiles asignado al usuario.">
+						<f:facet name="header">
+							Asignar Perfiles
+						</f:facet>
+						<p:column headerText="Nombre del Perfil" style="text-align:center">
+							<h:outputText value="#{perfil.nombre}" />
+						</p:column>
+						<p:column headerText="Eliminar" style="text-align:center">
+							<p:commandButton title="Eliminar" value="Eliminar" ajax="true" action="#{mantenimientoUsuarioController.eliminarPerfilModificado}" update=":formMantenimientoUsuario:dtModificarPerfiles,:formMantenimientoUsuario:growl">
+								<f:setPropertyActionListener target="#{mantenimientoUsuarioController.perfilModificadoEliminado}" value="#{perfil}"/>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					<br/>
+					<br/>
+				</p:panel>
+			</p:dialog>
+			
+			<p:dialog id="dialogConfirmacionRegistroUsuario" header="Confirmación" 
+				widgetVar="dlgConfirmacionRegistroUsuario" visible="#{mantenimientoUsuarioController.validarUsuario}" modal="true">
+				<br/>
+				<h:outputText value="¿Está seguro de registrar un usuario?" icon="ui-icon-alert" />
+				<p:separator/>
+				<br/>
+	        	<p:commandButton value="Si" title="Si" actionListener="#{mantenimientoUsuarioController.registrar}" oncomplete="PF('dlgConfirmacionRegistroUsuario').hide(),setTimeout(function() { $('[id$=messagesRegistroUsuario]').hide(0); }, 0);" icon="ui-icon-check" update=":formMantenimientoUsuario:growl,:formMantenimientoUsuario:dialogConfirmacionRegistroUsuario,:formMantenimientoUsuario:tabViewMantenimientoUsuario:panelRegistrarUsuario" />
+	        	<p:commandButton value="No" title="No" oncomplete="PF('dlgConfirmacionRegistroUsuario').hide()" icon="ui-icon-close" update=":formMantenimientoUsuario:dialogConfirmacionRegistroUsuario"/>
+	    	</p:dialog>
+	    	
+	    	<p:dialog id="dialogConfirmacionCambiarContrasenia" header="Confirmación" 
+				widgetVar="dlgConfirmacionCambiarContrasenia" visible="#{mantenimientoUsuarioController.validarContrasenia}" modal="true">
+				<br/>
+				<h:outputText value="¿Está seguro de cambiar la contraseña de este usuario?" icon="ui-icon-alert" />
+				<p:separator/>
+				<br/>
+	        	<p:commandButton value="Si" title="Si" actionListener="#{mantenimientoUsuarioController.cambiarContrasenia}" oncomplete="PF('dlgConfirmacionCambiarContrasenia').hide(),PF('dlgCambiarContrasenia').hide()" icon="ui-icon-check" update=":formMantenimientoUsuario:growl,:formMantenimientoUsuario:dialogConfirmacionCambiarContrasenia,:formMantenimientoUsuario:dialogCambiarContrasenia," />
+	        	<p:commandButton value="No" title="No" oncomplete="PF('dlgConfirmacionCambiarContrasenia').hide()" icon="ui-icon-close" update=":formMantenimientoUsuario:dialogConfirmacionCambiarContrasenia"/>
+	    	</p:dialog>
+	    	
+			<p:dialog id="dialogConfirmacionModificarUsuario" header="Confirmación"
+				widgetVar="dlgConfirmacionModificarUsuario" visible="#{mantenimientoUsuarioController.validarModificarUsuario}" modal="true">
+				<br/>
+				<h:outputText value="¿Está seguro de modificar este usuario?" icon="ui-icon-alert" />
+				<p:separator/>
+				<br/>
+	        	<p:commandButton value="Si" title="Si" actionListener="#{mantenimientoUsuarioController.modificar}" oncomplete="PF('dlgConfirmacionModificarUsuario').hide(),PF('dlgModificarUsuario').hide()" icon="ui-icon-check" update=":formMantenimientoUsuario:growl,:formMantenimientoUsuario:dialogConfirmacionModificarUsuario," />
+	        	<p:commandButton value="No" title="No" oncomplete="PF('dlgConfirmacionModificarUsuario').hide()" icon="ui-icon-close" update=":formMantenimientoUsuario:dialogConfirmacionModificarUsuario"/>
+	    	</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

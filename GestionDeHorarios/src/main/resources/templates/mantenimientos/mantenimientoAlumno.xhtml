@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/paginas/otros/plantilla.xhtml">
+    <ui:define name="title">SGMCEUPS</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formMantenimientoAlumno">
+			<p:growl id="growl" showDetail="true" life="10000"/> 
+			<p:tabView id="tvwMantenimientoAlumno" dynamic="true">
+				<p:tab title="Registrar Alumno">
+					<p:panel header="Registrar de Alumno">
+						<h:panelGrid columns="2" cellpadding="5">							
+							<h:outputLabel for="nombre" value="Nombres: "/>
+							<p:inputText id="nombre" value="#{mantenimientoAlumnoController.nombre}" placeholder="p.e: MARIA TERESA" style="text-transform: uppercase" />
+						
+							<h:outputLabel for="apPaterno" value="Apellido Paterno : "/>
+							<p:inputText id="apPaterno" value="#{mantenimientoAlumnoController.apPaterno}" placeholder="p.e: SALAS" style="text-transform: uppercase" />
+						
+							<h:outputLabel for="apMaterno" value="Apellido Materno : "/>
+							<p:inputText id="apMaterno" value="#{mantenimientoAlumnoController.apMaterno}" placeholder="p.e: GAMIO" style="text-transform: uppercase" />
+						
+							<h:outputLabel for="dni" value="DNI: "/>
+							<p:inputMask id="dni" value="#{mantenimientoAlumnoController.dni}" placeholder="p.e: 41526389" mask="99999999"/>
+						
+							<h:outputLabel for="fecNacimiento" value="Fecha de Nacimiento: "/>
+							<p:calendar id="fecNacimiento" value="#{mantenimientoAlumnoController.fecNacimiento}" showOn="button" readonlyInput="true" locale="es"/>
+						
+							<h:outputLabel for="telefono" value="Teléfono: "/>
+							<p:inputText id="telefono" value="#{mantenimientoAlumnoController.telefono}" placeholder="p.e: 93180373"/>
+						
+							<h:outputLabel for="direccion" value="Dirección: "/>
+							<p:inputText id="direccion" value="#{mantenimientoAlumnoController.direccion}" placeholder="p.e: Calle Casuarionas MzA Lt41" style="text-transform: uppercase" />
+						
+							<h:outputLabel for="email" value="Correo: "/>
+							<p:inputText id="email" value="#{mantenimientoAlumnoController.email}" placeholder="p.e: Maria_01@gmail.com" style="text-transform: uppercase" />
+						</h:panelGrid>
+						<p:commandButton value="Registrar Alumno" title="Registrar Alumno" action="#{mantenimientoAlumnoController.registrarAlumno}" update=":formMantenimientoAlumno"/>
+					</p:panel>
+			    </p:tab>
+			    
+			    <p:tab title="Modificar Alumno" >
+			    	<p:panel header="Busqueda de Alumno" id="panelBusquedaAlumno">		    			
+			    			<p:selectOneRadio id="customRadio" value="#{mantenimientoAlumnoController.radioBusqueda}" layout="custom">
+								<f:selectItem itemLabel="DNI: " itemValue="0" />
+							    <f:selectItem itemLabel="Nombres: " itemValue="1" />
+							    <f:selectItem itemLabel="Apellido Paterno: " itemValue="2" />
+							    <f:selectItem itemLabel="Apellido Materno: " itemValue="3" />
+							    <p:ajax listener="#{mantenimientoAlumnoController.cambiarBusqueda}" update=":formMantenimientoAlumno:tvwMantenimientoAlumno:panelBusquedaAlumno" event="change" />
+							</p:selectOneRadio>
+							 
+							<h:panelGrid columns="3" cellpadding="5">
+									<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+									<h:outputLabel for="opt1" value="DNI: " />
+								    <p:inputMask value="#{mantenimientoAlumnoController.dniS}" id="idSearch" style="text-transform: uppercase" disabled="#{mantenimientoAlumnoController.radioBusqueda != 0}" mask="99999999"/>
+								 
+								    <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+								    <h:outputLabel for="opt2" value="Nombres: " />
+								    <p:inputText value="#{mantenimientoAlumnoController.nombreS}" id="nombreSearch" style="text-transform: uppercase"  disabled="#{mantenimientoAlumnoController.radioBusqueda != 1}" />
+								            
+								    <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+								    <h:outputLabel for="opt3" value="Apellido Paterno: " />
+								    <p:inputText value="#{mantenimientoAlumnoController.apPaternoS}" id="appSearch" style="text-transform: uppercase"   disabled="#{mantenimientoAlumnoController.radioBusqueda != 2}"/>
+								            
+								    <p:radioButton id="opt4" for="customRadio" itemIndex="3" />
+								    <h:outputLabel for="opt4" value="Apellido Materno: " />
+								    <p:inputText value="#{mantenimientoAlumnoController.apMaternoS}" id="apmSearch" style="text-transform: uppercase"   disabled="#{mantenimientoAlumnoController.radioBusqueda != 3}"/>
+							 </h:panelGrid>
+							 <br></br>
+							 <br></br>
+							 <p:commandButton value="Buscar" action="#{mantenimientoAlumnoController.buscarAlumno}" update=":formMantenimientoAlumno:tvwMantenimientoAlumno:tableAlumn,:formEditarAlumno:" />
+			    				
+			    			
+			    		</p:panel>
+			    		<br></br>
+			    		<br></br>
+			    		<p:dataTable id="tableAlumn" var="alumn" value="#{mantenimientoAlumnoController.listaAlumnos}" rowKey="#{alumn.id}">
+			    			<p:column headerText="Nombres" style="text-align:center">
+			    				<h:outputText value="#{alumn.nombre}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Apellido Paterno" style="text-align:center">
+			    				<h:outputText value="#{alumn.apPaterno}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Apellido Materno" style="text-align:center">
+			    				<h:outputText value="#{alumn.apMaterno}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="DNI" style="text-align:center">
+			    				<h:outputText value="#{alumn.dni}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Fecha de Nacimiento" style="text-align:center">
+			    				<h:outputText value="#{alumn.fecNacimiento}">
+			    					<f:convertDateTime pattern="dd/MM/yyyy" />
+			    				</h:outputText>
+			    			</p:column>
+			    			
+			    			<p:column headerText="Teléfono" style="text-align:center">
+			    				<h:outputText value="#{alumn.telefono}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Dirección" style="text-align:center">
+			    				<h:outputText value="#{alumn.direccion}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Correo" style="text-align:center">
+			    				<h:outputText value="#{alumn.email}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Acción" style="text-align:center">
+			    				<p:commandButton value="Editar"  onclick="PF('modalEditarAlumno').show();" update=":formEditarAlumno">
+			    					<f:setPropertyActionListener value="#{alumn}"	target="#{mantenimientoAlumnoController.alumnoSeleccion}" />
+			    				</p:commandButton>
+			    			</p:column>			    			
+			    		</p:dataTable>			    	
+			     </p:tab>
+			</p:tabView>			
+		</h:form>
+		
+		<p:dialog rendered="true" header="Editar Alumno" widgetVar="modalEditarAlumno"  resizable="false" modal="true">  
+			<h:form id="formEditarAlumno">
+		   		<h1>Datos del Alumno</h1>
+			   	<h:panelGrid columns="2" cellpadding="5">
+			   		
+			   		<h:outputLabel value="Nombre: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.nombre}" /><!-- #{mantenimientoAlumnoController.alumnoSeleccion.nombres} -->
+			   		</p:inplace>			   			
+			   		
+			   		<h:outputLabel value="Apellido Paterno: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.apPaterno}" />
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="Apellido Materno: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.apMaterno}" />
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="DNI: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.dni}" />
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="Fecha de Nacimiento: "/>
+			   		<p:inplace>
+			   			<p:calendar value="#{mantenimientoAlumnoController.alumnoSeleccion.fecNacimiento}" pattern="dd/MM/yyyy" locale="es">
+			   				<f:convertDateTime pattern="dd/MM/yyyy"/>
+			   			</p:calendar>
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="Teléfono: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.telefono}" />
+			   		</p:inplace>
+			   		
+			   					   		
+			   		<h:outputLabel value="Dirección: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.direccion}" />
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="Correo: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoAlumnoController.alumnoSeleccion.email}" />
+			   		</p:inplace>			   	
+			   	</h:panelGrid>
+			   	<br></br>
+			   	<br></br>
+			   	<p:commandButton value="Actualizar Datos" onclick="PF('confirmarCambio').show();"  />
+		   	</h:form>	
+		</p:dialog>
+		
+		<p:dialog rendered="true" header="Confirmacion" widgetVar="confirmarCambio"  resizable="false" height="200" width="300">
+			<h:form id="confirmarCambio">
+				¿Está seguro de realizar los cambios?
+				<br></br>
+				<br></br>
+				<br></br>
+				<br></br>
+				<p:commandButton value="Aceptar" action="#{mantenimientoAlumnoController.editarAlumno}" oncomplete="PF('confirmarCambio').hide();PF('modalEditarAlumno').hide();"
+								 update=":formMantenimientoAlumno:tvwMantenimientoAlumno" />
+				<p:commandButton value="Cancelar" update=":formEditarAlumno"   oncomplete="PF('confirmarCambio').hide();" />
+			</h:form>		
+		</p:dialog>		
+	</ui:define>
+</ui:composition>

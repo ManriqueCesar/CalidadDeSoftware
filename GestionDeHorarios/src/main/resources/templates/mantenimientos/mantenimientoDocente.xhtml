@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/paginas/otros/plantilla.xhtml">
+	<ui:define name="title">SGMCEUPS</ui:define>
+	<ui:define name="contenido">
+	<h:form id="formMantenimientoDocente">
+		<p:growl id="growl" showDetail="true" life="10000"/> 
+		<p:tabView id="tabViewMantenimientoDocente">
+				<p:tab title="Registrar Docente">
+					<div align="left">
+						<p:messages id="messagesRegistroDocente" showDetail="true" closable="true" />
+					</div>
+					<p:separator/>
+					<p:panel id="panelRegistrarDocente" header="Registrar Docente">
+						<h:panelGrid columns="2"  cellpadding="5">
+							<h:outputText value="Nombres: " />
+							<p:inputText value="#{mantenimientoDocenteController.docenteIngresado.nombre}" size="35" />
+							
+							<h:outputText value="Apellido paterno: " />
+							<p:inputText value="#{mantenimientoDocenteController.docenteIngresado.apPaterno}" size="35" />
+												
+							<h:outputText value="Apellido Materno: " />
+							<p:inputText value="#{mantenimientoDocenteController.docenteIngresado.apMaterno}" size="35" />
+							
+							<h:outputText value="DNI: " />
+							<p:inputMask  value="#{mantenimientoDocenteController.docenteIngresado.dni}" size="35" mask="99999999"/>
+							
+							<h:outputText value="Fecha de Nacimiento: " />
+							<p:calendar  value="#{mantenimientoDocenteController.docenteIngresado.fecNacimiento}" pattern="dd/MM/yyyy" locale="es"/>
+							
+							<h:outputText value="Teléfono: " />
+							<p:inputText value="#{mantenimientoDocenteController.docenteIngresado.telefono}" size="35" placeholder="p.e. (999)999-9999 ó 999-999-999"/>
+							
+							<h:outputText value="Dirección: " />
+							<p:inputText value="#{mantenimientoDocenteController.docenteIngresado.direccion}" size="35" />
+							
+							<h:outputText value="Correo electrónico: " />
+							<p:inputText type="email" value="#{mantenimientoDocenteController.docenteIngresado.email}" placeholder="p.e. contacto@ejemplo.com" size="35"/>
+							
+							<h:outputText value="Especialidad:"/>
+							<p:selectOneMenu id="seleccionEspecialidadDocenteIngresado" value="#{mantenimientoDocenteController.docenteIngresado.idEspecialidad}" filter="true" filterMatchMode="contains" style="width:250px">
+							<f:selectItem itemLabel="Seleccione una especialidad." itemValue="0"/>
+							<f:selectItems value="#{mantenimientoDocenteController.listaEspecialidad}"
+							var="especialidad" itemLabel="#{especialidad.nombre}"
+							itemValue="#{especialidad.id}" />
+						</p:selectOneMenu>
+						</h:panelGrid>
+						<br/>
+						<br/>
+						<center>
+							<p:commandButton title="Registrar" value="Registrar" actionListener="#{mantenimientoDocenteController.validarDatosDocente}" update=":formMantenimientoDocente:tabViewMantenimientoDocente:messagesRegistroDocente,:formMantenimientoDocente:dialogConfirmacionRegistroDocente"/>
+						</center>
+					</p:panel>
+				</p:tab>
+				<p:tab title="Modificar Docente">
+					<p:panel id="panelBusquedaDocente" header="Búsqueda de Docentes">
+						<p:selectOneRadio id="radioBusquedaDocente" value="#{mantenimientoDocenteController.opcionBusquedaDocente}" layout="custom">
+		          			<f:selectItem itemValue="1" />
+		          			<f:selectItem itemValue="2" />
+		          			<f:selectItem itemValue="3" />
+		          			<f:selectItem itemValue="4" />
+		          			<f:selectItem itemValue="5" />  			
+		         			<p:ajax listener="#{mantenimientoDocenteController.limpiarCampoBusquedaDocente}" update=":formMantenimientoDocente:tabViewMantenimientoDocente:panelBusquedaDocente" event="change" />
+		      			</p:selectOneRadio>
+						
+						<h:outputText value="Seleccione una opción de búsqueda:"/>
+	 					<h:panelGrid columns="3">
+							<p:radioButton id="op1" for="radioBusquedaDocente" itemIndex="0" />
+		            		<h:outputLabel for="op1" value="DNI:"/>
+							<p:inputMask value="#{mantenimientoDocenteController.campoBusquedaDocente}" size="35" disabled="#{mantenimientoDocenteController.opcionBusquedaDocente!=1}" mask="99999999"/>
+							
+							<p:radioButton id="op2" for="radioBusquedaDocente" itemIndex="1" />
+		            		<h:outputLabel for="op2" value="Nombre:"/>
+							<p:inputText value="#{mantenimientoDocenteController.campoBusquedaDocente}" size="35" disabled="#{mantenimientoDocenteController.opcionBusquedaDocente!=2}"/>
+							
+							<p:radioButton id="op3" for="radioBusquedaDocente" itemIndex="2" />
+		            		<h:outputLabel for="op3" value="Apellido paterno:"/>
+							<p:inputText value="#{mantenimientoDocenteController.campoBusquedaDocente}" size="35" disabled="#{mantenimientoDocenteController.opcionBusquedaDocente!=3}"/>
+							
+							<p:radioButton id="op4" for="radioBusquedaDocente" itemIndex="3" />
+		            		<h:outputLabel for="op4" value="Apellido materno:"/>
+							<p:inputText value="#{mantenimientoDocenteController.campoBusquedaDocente}" size="35" disabled="#{mantenimientoDocenteController.opcionBusquedaDocente!=4}"/>
+							
+							<p:radioButton id="op5" for="radioBusquedaDocente" itemIndex="4" />
+		            		<h:outputLabel for="op5" value="Especialidad:"/>
+							<p:selectOneMenu id="seleccionEspecialidadDocenteBusqueda" value="#{mantenimientoDocenteController.idCampoBusquedaDocente}" filter="true" filterMatchMode="contains" style="width:250px" disabled="#{mantenimientoDocenteController.opcionBusquedaDocente!=5}">
+								<f:selectItem itemLabel="Seleccione una especialidad." itemValue="0"/>
+								<f:selectItems value="#{mantenimientoDocenteController.listaEspecialidad}"
+								var="especialidad" itemLabel="#{especialidad.nombre}"
+								itemValue="#{especialidad.id}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<br/>
+						<p:commandButton value="Buscar" title="Buscar" actionListener="#{mantenimientoDocenteController.buscarDocente}" update=":formMantenimientoDocente:tabViewMantenimientoDocente:dtListaDocente,:formMantenimientoDocente:growl"/>
+					</p:panel>
+					<br/>
+					<br/>
+					<p:dataTable id="dtListaDocente" var="docente" value="#{mantenimientoDocenteController.listaDocente}" emptyMessage="No existen docentes con la búsqueda realizada.">
+						<f:facet name="header">
+							Lista de Docentes
+						</f:facet>
+						<p:column headerText="Nombre" style="text-align:center">
+							<h:outputText value="#{docente.nombre}"/>
+						</p:column>
+						<p:column headerText="Apellido paterno" style="text-align:center">
+							<h:outputText value="#{docente.apPaterno}"/>
+						</p:column>
+						<p:column headerText="Apellido Materno" style="text-align:center">
+							<h:outputText value="#{docente.apMaterno}"/>
+						</p:column>
+						<p:column headerText="DNI" style="text-align:center">
+							<h:outputText value="#{docente.dni}"/>
+						</p:column>
+						<p:column headerText="Fecha de nacimiento" style="text-align:center">
+							<h:outputText value="#{docente.fecNacimiento}">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Dirección" style="text-align:center">
+							<h:outputText value="#{docente.direccion}"/>
+						</p:column>
+						<p:column headerText="Correo electrónico" style="text-align:center">
+							<h:outputText value="#{docente.email}"/>
+						</p:column>
+						<p:column headerText="Especialidad" style="text-align:center">
+							<h:outputText value="#{docente.nombreEspecialidad}"/>
+						</p:column>
+						<p:column headerText="Modificar" style="text-align:center">
+							<p:commandButton value="Modificar" title="Modificar" oncomplete="PF('dlgModificarDocente').show()" update=":formMantenimientoDocente:dialogModificarDocente">
+								<f:setPropertyActionListener target="#{mantenimientoDocenteController.docenteModificado}" value="#{docente}"/>
+							</p:commandButton>
+						</p:column>
+					</p:dataTable> 	
+				</p:tab>
+				<p:tab  title="Registrar/Modificar Especialidad">
+			    	<p:panel header="Registrar Especialidad">
+			    		<h:outputText value="Ingrese el nombre de la nueva Especialidad:"/>
+			    		<br/>
+			    		<br/>
+			    		<h:panelGrid columns="2">
+				    		<h:outputText value="Nombre:"/>
+				    		<p:inputText  value="#{mantenimientoDocenteController.especialidadIngresada.nombre}" size="35"/>
+			    		</h:panelGrid>
+			    		<br/>
+			    		<p:commandButton value="Registrar" action="#{mantenimientoDocenteController.registrarEspecialidad}" update=":formMantenimientoDocente:growl,:formMantenimientoDocente:tabViewMantenimientoDocente:"/>
+			    	</p:panel>
+			    	<br/>
+			    	<br/>
+			    	<br/>
+			    	<br/>
+			    	<p:panel header="Modificar Especialidad">
+			    		<p:dataTable id="dtEspecialidad" var="especialidad" value="#{mantenimientoDocenteController.listaEspecialidad}"
+		    					rowKey="#{especialidad.id}" filteredValue="#{mantenimientoDocenteController.filtroListaEspecialidad}">
+			    			<f:facet name="header">
+			    				Lista de Especialidades
+			    			</f:facet>
+			    			
+			    			<p:column filterBy="#{especialidad.nombre}" headerText="Especialidad" filterMatchMode="contains" style="text-align:center">
+			    				<h:outputText value="#{especialidad.nombre}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Modificar" style="text-align:center">
+			    				<p:commandButton value="Modificar" oncomplete="PF('dlgModificarEspecialidad').show()" update=":formMantenimientoDocente:">
+			    					<f:setPropertyActionListener value="#{especialidad}"  target="#{mantenimientoDocenteController.especialidadSeleccionada}" />
+			    				</p:commandButton>
+			    			</p:column>
+			    			
+			    			<p:column headerText="Eliminar" style="text-align:center">
+			    				<p:commandButton value="Eliminar" action="#{mantenimientoDocenteController.eliminarEspecialidad}" update=":formMantenimientoDocente:growl,:formMantenimientoDocente:tabViewMantenimientoDocente:">
+			    						<f:setPropertyActionListener value="#{especialidad}" target="#{mantenimientoDocenteController.especialidadSeleccionada}" />
+			    				</p:commandButton>
+			    			</p:column>
+						</p:dataTable>
+			    	</p:panel>
+			    </p:tab>
+			</p:tabView>
+			
+			<p:dialog id="dialogModificarDocente" header="Modificar Docente" showEffect="fade" hideEffect="explode"
+				widgetVar="dlgModificarDocente" modal="true">
+				<p:ajax event="close" update="dialogModificarDocente"/>
+				<div align="left">
+					<p:messages id="messagesModificarDocente" showDetail="true" closable="true" />
+				</div>
+				<p:separator/>
+				<p:panel header="Modificar Docente">
+					<h:outputText value="Modifique los campos que desee:"/>
+					<br/>
+					<br/>
+					<h:panelGrid columns="2">
+							<h:outputText value="Nombres: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoDocenteController.docenteModificado.nombre}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Apellido paterno: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoDocenteController.docenteModificado.apPaterno}" size="35" />
+							</p:inplace>
+												
+							<h:outputText value="Apellido Materno: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoDocenteController.docenteModificado.apMaterno}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="DNI: " />
+							<p:inplace>
+								<p:inputMask value="#{mantenimientoDocenteController.docenteModificado.dni}" size="35" mask="99999999"/>
+							</p:inplace>
+							
+							<h:outputText value="Fecha de nacimiento: " />
+							<p:inplace>
+							<p:calendar value="#{mantenimientoDocenteController.docenteModificado.fecNacimiento}" pattern="dd/MM/yyyy" locale="es">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</p:calendar>
+							</p:inplace>
+							
+							<h:outputText value="Teléfono: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoDocenteController.docenteModificado.telefono}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Dirección: " />
+							<p:inplace>
+								<p:inputText value="#{mantenimientoDocenteController.docenteModificado.direccion}" size="35" />
+							</p:inplace>
+							
+							<h:outputText value="Correo electrónico: " />
+							<p:inplace>
+								<p:inputText type="email" value="#{mantenimientoDocenteController.docenteModificado.email}" placeholder="contacto@ejemplo.com" size="35" />
+							</p:inplace>
+					</h:panelGrid>
+					<br/>
+					<br/>
+					<p:commandButton value="Guardar cambios" title="Guardar cambios" actionListener="#{mantenimientoDocenteController.validarDatosModificarDocente}" update=":formMantenimientoDocente:messagesModificarDocente,:formMantenimientoDocente:dialogConfirmacionModificarDocente" />
+					<br/>
+					<br/>
+				</p:panel>
+			</p:dialog>
+	
+			<p:dialog id="dialogConfirmacionRegistroDocente" header="Confirmación" 
+				widgetVar="dlgConfirmacionRegistroDocente" visible="#{mantenimientoDocenteController.validarDocente}" modal="true">
+				<br/>
+				<h:outputText value="¿Está seguro de registrar un docente?" icon="ui-icon-alert" />
+				<p:separator/>
+				<br/>
+	        	<p:commandButton value="Si" title="Si" actionListener="#{mantenimientoDocenteController.registrar}" oncomplete="PF('dlgConfirmacionRegistroDocente').hide(),setTimeout(function() { $('[id$=messagesRegistroDocente]').hide(0); }, 0);" icon="ui-icon-check" update=":formMantenimientoDocente:growl,:formMantenimientoDocente:dialogConfirmacionRegistroDocente,:formMantenimientoDocente:tabViewMantenimientoDocente:panelRegistrarDocente" />
+	        	<p:commandButton value="No" title="No" oncomplete="PF('dlgConfirmacionRegistroDocente').hide()" icon="ui-icon-close" update=":formMantenimientoDocente:dialogConfirmacionRegistroDocente"/>
+	    	</p:dialog>
+	    	
+	    	<p:dialog id="dialogConfirmacionModificarDocente" header="Confirmación"
+				widgetVar="dlgConfirmacionModificarDocente" visible="#{mantenimientoDocenteController.validarModificarDocente}" modal="true">
+				<br/>
+				<h:outputText value="¿Está seguro de modificar este docente" icon="ui-icon-alert" />
+				<p:separator/>
+				<br/>
+	        	<p:commandButton value="Si" title="Si" actionListener="#{mantenimientoDocenteController.modificar}" oncomplete="PF('dlgConfirmacionModificarDocente').hide(),PF('dlgModificarDocente').hide()" icon="ui-icon-check" update=":formMantenimientoDocente:growl,:formMantenimientoDocente:dialogConfirmacionModificarDocente,:formMantenimientoDocente:tabViewMantenimientoDocente:dtListaDocente" />
+	        	<p:commandButton value="No" title="No" oncomplete="PF('dlgConfirmacionModificarDocente').hide()" icon="ui-icon-close" update=":formMantenimientoDocente:dialogConfirmacionModificarDocente"/>
+	    	</p:dialog>
+	    	
+	    	<p:dialog header="Modificar Especialidad" modal="true" widgetVar="dlgModificarEspecialidad"  resizable="true">
+				<h:outputText value="Modifique los campos que desee:"/>
+		   		<br/>
+		   		<br/>
+		   		<h:panelGrid columns="2">
+		    		<h:outputText value="Nombre:"/>
+		    		<p:inplace>
+		    			<p:inputText  value="#{mantenimientoDocenteController.especialidadSeleccionada.nombre}" size="35"/>
+		    		</p:inplace>
+		    	</h:panelGrid>
+	    		<br/>
+	    		<br/>
+	    		<p:commandButton value="Guardar" action="#{mantenimientoDocenteController.modificarEspecialidad}" oncomplete="PF('dlgModificarEspecialidad').hide();" update=":formMantenimientoDocente:growl,:formMantenimientoDocente:tabViewMantenimientoDocente:"/>
+	    	</p:dialog>
+	</h:form>
+	</ui:define>
+</ui:composition>

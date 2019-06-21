@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	template="/paginas/otros/plantilla.xhtml">
+	<ui:define name="title">SGMCEUPS</ui:define>
+	<ui:define name="contenido">
+		<h:form id="formMantenimientoCurso">
+			<p:growl id="growl" showDetail="true" life="10000"/> 	
+			<p:tabView id="tvwBusquedaCurso">
+				<p:tab title="Registrar Curso">
+			    	<p:panel id="panelRegistroCurso" header="Registro de Curso"> 
+			        	<h:panelGrid columns="2" cellpadding="5">
+			                <h:outputLabel for="nombre" value="Nombre: "/>
+							<p:inputText id="nombre" value="#{mantenimientoCursoController.nombre}"  style="text-transform: uppercase; width:190px" />
+			                <p:outputLabel for="tipoCursoS" value="Tipo:"/>
+			                
+			                <p:selectOneMenu value="#{mantenimientoCursoController.tipoSeleccionado}" style="width:200px" id="tipoCursoS" widgetVar="tipoCursoS" filter="true" filterMatchMode="contains">
+								<f:selectItem itemLabel="Seleccione un tipo de curso" itemValue="0" />
+								<f:selectItems
+									value="#{mantenimientoCursoController.listaTipoCurso}"
+									var="tipos" itemLabel="#{tipos.nombre}"
+									itemValue="#{tipos.id}" />
+							</p:selectOneMenu>
+					        
+					        <h:outputLabel for="nivel" value="Nivel:"/>
+							<p:inputText id="nivel" value="#{mantenimientoCursoController.nivel}"  style="text-transform: uppercase; width:190px" />
+			                
+					        <h:outputLabel for="vacante" value="Número de vacantes: "/>
+							<p:inputText id="vacante" value="#{mantenimientoCursoController.vacante}"  style="text-transform: uppercase; width:190px" />
+			                
+			                <h:outputLabel for="numhoras" value="Número de horas: "/>
+							<p:inputText id="numhoras" value="#{mantenimientoCursoController.numHoras}" style="text-transform: uppercase; width:190px" />
+			            </h:panelGrid>
+			            <p:commandButton value="Guardar" title="Guardar" action="#{mantenimientoCursoController.guardarCurso}" update=":formMantenimientoCurso:growl,:formMantenimientoCurso:tvwBusquedaCurso:panelRegistroCurso"/>
+					</p:panel>
+				</p:tab>
+			    
+			    <p:tab title="Modificar Curso">
+			        <p:panel header="Búsqueda de Curso" id="panelBusquedaCurso">		    			
+			    		<br/>
+			    		<p:selectOneRadio id="customRadio" value="#{mantenimientoCursoController.radioBusqueda}" layout="custom">
+							<f:selectItem itemLabel="Tipo de curso: " itemValue="0" />
+							<f:selectItem itemLabel="Nombre: " itemValue="1" /> 
+							    <p:ajax listener="#{mantenimientoCursoController.cambiarBusqueda}" update=":formMantenimientoCurso:tvwBusquedaCurso:panelBusquedaCurso" event="change" /> 
+						</p:selectOneRadio>
+						<h:outputText value="Seleccione una opción:"/>
+						<h:panelGrid columns="3" cellpadding="5">
+							
+							<p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+							<h:outputLabel for="tipo" value="Tipo de curso:"/>
+				            <p:selectOneMenu value="#{mantenimientoCursoController.tipoSeleccionadoS}" style="width:200px" id="tipo"
+									widgetVar="tipo" filter="true" filterMatchMode="contains" disabled="#{mantenimientoCursoController.radioBusqueda != 0}">
+								<f:selectItem itemLabel="Seleccione un tipo de curso" itemValue="0" />
+								<f:selectItems
+									value="#{mantenimientoCursoController.listaTipoCurso}"
+									var="tipos" itemLabel="#{tipos.nombre}"
+									itemValue="#{tipos.id}" />
+							</p:selectOneMenu>
+							<p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+							<h:outputLabel for="nombre" value="Nombre del curso: "/>
+							<p:inputText id="nombreB" value="#{mantenimientoCursoController.nombreCursoS}"  style="text-transform: uppercase; width:190px" disabled="#{mantenimientoCursoController.radioBusqueda != 1}" />
+			            </h:panelGrid>
+						<br/>
+						<br/>
+						<p:commandButton value="Buscar" action="#{mantenimientoCursoController.buscarCurso}" update="tableCruso" />
+				    </p:panel>
+			    	<br/>
+			    	<br/>
+			    	<p:dataTable id="tableCruso" var="curso" 
+		    					value="#{mantenimientoCursoController.listaCursos}"
+		    					rowKey="#{curso.id}">
+		    			<p:column headerText="Nombre del curso" style="text-align:center">
+		    				<h:outputText value="#{curso.nombre}" />
+		    			</p:column>
+		    			
+		    			<p:column headerText="Tipo de curso" style="text-align:center">
+		    				<h:outputText value="#{curso.nombreTipoCurso}" />
+		    			</p:column>
+		    			
+		    			<p:column headerText="Nivel de curso" style="text-align:center">
+		    				<h:outputText value="#{curso.nivel}" />
+		    			</p:column>
+		    			
+		    			<p:column headerText="Número Vacantes" style="text-align:center">
+		    				<h:outputText value="#{curso.vacante}" />
+		    			</p:column>
+		    			
+		    			<p:column headerText="Número Horas" style="text-align:center">
+		    				<h:outputText value="#{curso.numHoras}" />
+		    			</p:column>
+		    			
+		    			<p:column headerText="Modificar" style="text-align:center">
+		    				<p:commandButton value="Modificar"  onclick="PF('modalEditarCurso').show();" update=":formEditarCurso">
+		    					<f:setPropertyActionListener value="#{curso}"	target="#{mantenimientoCursoController.cursoSeleccionado}" />
+		    				</p:commandButton>
+		    			</p:column>	 					    			
+		    		</p:dataTable>
+			    </p:tab>
+			    
+			    <p:tab  title="Registrar/Modificar Tipo de Curso">
+			    	<p:panel header="Registrar Tipo de Curso">
+			    		<h:outputText value="Ingrese el nombre del nuevo Tipo de Curso:"/>
+			    		<br/>
+			    		<br/>
+			    		<h:panelGrid columns="2">
+				    		<h:outputText value="Nombre:"/>
+				    		<p:inputText  value="#{mantenimientoCursoController.tipoCursoIngresado.nombre}" size="35"/>
+			    		</h:panelGrid>
+			    		<br/>
+			    		<br/>
+			    		<p:commandButton value="Registrar" action="#{mantenimientoCursoController.registrarTipoCurso}" update=":formMantenimientoCurso:growl,:formMantenimientoCurso:tvwBusquedaCurso:"/>
+			    	</p:panel>
+			    	<br/>
+			    	<br/>
+			    	<br/>
+			    	<br/>
+			    	<p:panel header="Modificar Tipo de Curso">
+			    		<p:dataTable id="dtTipoCurso" var="tipoCurso" value="#{mantenimientoCursoController.listaTipoCurso}"
+		    					rowKey="#{tipoCurso.id}" filteredValue="#{mantenimientoCursoController.filtroListaTipoCurso}">
+			    			<f:facet name="header">
+			    				Lista de Tipos de Curso
+			    			</f:facet>
+			    			
+			    			<p:column filterBy="#{tipoCurso.nombre}" headerText="Nombre del Tipo Curso" filterMatchMode="contains" style="text-align:center">
+			    				<h:outputText value="#{tipoCurso.nombre}" />
+			    			</p:column>
+			    			
+			    			<p:column headerText="Modificar" style="text-align:center">
+			    				<p:commandButton value="Modificar" oncomplete="PF('dlgModificarTipoCurso').show()" update=":formModificarTipoCurso:">
+			    					<f:setPropertyActionListener value="#{tipoCurso}"  target="#{mantenimientoCursoController.tipoCursoSeleccionado}" />
+			    				</p:commandButton>
+			    			</p:column>
+			    			
+			    			<p:column headerText="Eliminar" style="text-align:center">
+			    				<p:commandButton value="Eliminar" action="#{mantenimientoCursoController.eliminarTipoCurso}" update=":formMantenimientoCurso:growl,:formMantenimientoCurso:tvwBusquedaCurso:">
+			    						<f:setPropertyActionListener value="#{tipoCurso}" target="#{mantenimientoCursoController.tipoCursoSeleccionado}" />
+			    				</p:commandButton>
+			    			</p:column>
+						</p:dataTable>
+			    	</p:panel>
+			    </p:tab>
+			</p:tabView>
+		</h:form>
+		  
+		<p:dialog header="Modificar Curso" modal="true" widgetVar="modalEditarCurso"  resizable="true">  
+ 			<h:form id="formEditarCurso">
+ 		   		
+ 		   		<h:outputText value="Modifique los campos que desee:"/>
+ 		   		<br/>
+ 		   		<br/>
+ 			   	<h:panelGrid columns="2" cellpadding="5">
+ 			   		<h:outputLabel value="Nombre de curso: "/>	   	
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoCursoController.cursoSeleccionado.nombre}" />
+			   		</p:inplace>			   			
+			   		
+			   		<h:outputLabel value="Tipo de curso: "/>
+			   		<p:inplace>
+					   <h:inputHidden value="#{mantenimientoCursoController.cursoSeleccionado.nombreTipoCurso}" />  
+					   <p:selectOneMenu value="#{mantenimientoCursoController.cursoSeleccionado.idTipoCurso}"> 
+					      <f:selectItems value="#{mantenimientoCursoController.listaTipoCurso}"
+										var="tipos" itemLabel="#{tipos.nombre}"
+										itemValue="#{tipos.id}"  />
+					   </p:selectOneMenu>  
+					</p:inplace>
+			   	   	
+			   	   	<h:outputLabel value="Nidel de curso: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoCursoController.cursoSeleccionado.nivel}" />
+			   		</p:inplace>
+			   			
+			   		<h:outputLabel value="Número de vacantes: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoCursoController.cursoSeleccionado.vacante}" />
+			   		</p:inplace>
+			   		
+			   		<h:outputLabel value="Número de horas: "/>
+			   		<p:inplace>
+			   			<p:inputText value="#{mantenimientoCursoController.cursoSeleccionado.numHoras}" />
+			   		</p:inplace>
+			   	</h:panelGrid>
+			   	<br></br>
+			   	<br></br>
+			   	<p:commandButton value="Guardar" onclick="PF('confirmarCambio').show();"  />
+			   	<h:outputText value="   " style="white-space: pre-wrap"/>
+			   	<p:commandButton value="Cancelar" update=":formEditarCurso" oncomplete="PF('modalEditarCurso').hide();" immediate="true"/>
+		   	</h:form>	
+ 		</p:dialog>
+		
+		<p:confirmDialog message="Los datos serán modificados, ¿Está seguro de que desea continuar?" header="Confirmación" severity="alert" widgetVar="confirmarCambio">
+			<h:form id="confirmarCambio">
+				<center>
+					<p:commandButton value="Aceptar" action="#{mantenimientoCursoController.editarCurso}" oncomplete="PF('confirmarCambio').hide(); PF('modalEditarCurso').hide();"
+									 update=":formMantenimientoCurso:tvwBusquedaCurso,:formMantenimientoCurso:growl" />
+					<p:commandButton value="Cancelar" update=":formEditarCurso" oncomplete="PF('confirmarCambio').hide();" process="@this" />
+				</center>
+			</h:form>
+		</p:confirmDialog> 
+		
+		<p:dialog header="Modificar Tipo de Curso" modal="true" widgetVar="dlgModificarTipoCurso"  resizable="true">
+			<h:form id="formModificarTipoCurso">
+				<h:outputText value="Modifique los campos que desee:"/>
+		   		<br/>
+		   		<br/>
+		   		<h:panelGrid columns="2">
+		    		<h:outputText value="Nombre:"/>
+		    		<p:inplace>
+		    			<p:inputText  value="#{mantenimientoCursoController.tipoCursoSeleccionado.nombre}" size="35"/>
+		    		</p:inplace>
+		    	</h:panelGrid>
+	    		<br/>
+	    		<br/>
+	    		<p:commandButton value="Guardar" action="#{mantenimientoCursoController.modificarTipoCurso}" oncomplete="PF('dlgModificarTipoCurso').hide();" update=":formMantenimientoCurso:growl,:formMantenimientoCurso:tvwBusquedaCurso:"/>
+	    	</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
