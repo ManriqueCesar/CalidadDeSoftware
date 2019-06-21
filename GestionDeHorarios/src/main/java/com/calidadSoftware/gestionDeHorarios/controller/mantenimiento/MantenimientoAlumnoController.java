@@ -1,4 +1,4 @@
-package com.calidadSoftware.gestionDeHorario.controller.mantenimiento;
+package com.calidadSoftware.gestionDeHorarios.controller.mantenimiento;
 
 import java.io.Serializable;
 import java.util.ArrayList;
